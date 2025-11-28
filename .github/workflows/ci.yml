@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghr.io
-      IMAGE_NAME: ghcr.io/mshahwaiz-aliX/nebulastack-api
+      IMAGE_NAME: ghcr.io/mshahwaiz-alix/nebulastack-api
 
     steps:
       - name: Checkout code
