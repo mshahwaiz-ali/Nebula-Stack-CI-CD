@@ -1,0 +1,43 @@
+services:
+  web:
+    build: ./nginx
+    container_name: nebulastack-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build: ./api
+    container_name: nebulastack-api
+    ports:
+      - "5000:5000"
+    environment:
+      - APP_ENV=production
+      - DB_HOST=postgres
+      - DB_NAME=nebulastack
+      - DB_USER=nebula
+      - DB_PASS=secretpass
+    restart: unless-stopped
+
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: nebulastack-db
+    environment:
+      - POSTGRES_DB=nebulastack
+      - POSTGRES_USER=nebula
+      - POSTGRES_PASSWORD=secretpass
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+    db-data:
+  
+
+   
+  
