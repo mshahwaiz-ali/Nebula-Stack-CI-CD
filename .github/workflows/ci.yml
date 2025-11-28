@@ -54,3 +54,21 @@ jobs:
         run: |
           docker build -t $IMAGE_NAME:${{ github.sha }} ./api
           docker push $IMAGE_NAME:${{ github.sha }}
+  
+  deploy:
+    needs: api-ci
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > /.ssh/ec2_key
+          chmod 600 /.ssh/ec2_key
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            'cd Nebula-Stack-CI-CD && git pull && docker compose up -d --build'
