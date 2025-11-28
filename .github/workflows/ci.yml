@@ -6,9 +6,16 @@ on:
     branches: [ main ]
   pull_request:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   api-ci:
     runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghr.io
+      IMAGE_NAME: ghcr.io/mshahwaiz-aliX/nebulastack-api
 
     steps:
       - name: Checkout code
@@ -39,3 +46,11 @@ jobs:
         run: |
           cd api
           pytest
+      
+      - name: Login to GHCR
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push API image to GHCR
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} ./api
+          docker push $IMAGE_NAME:$ {{ github.sha }}
