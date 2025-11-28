@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>NebulaStack – Project Overview</title>
+  <!-- IMPORTANT for mobile scaling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -48,6 +50,7 @@
       font-weight: 800;
       text-shadow: 0 10px 30px rgba(0,0,0,0.9);
       margin-bottom: 0.5rem;
+      word-break: break-word;
     }
 
     .subtitle {
@@ -56,6 +59,7 @@
       max-width: 620px;
       margin: 0.25rem auto 0;
       line-height: 1.6;
+      padding: 0 0.25rem;
     }
 
     .tag-row {
@@ -96,11 +100,6 @@
       display: grid;
       grid-template-columns: minmax(0, 3.2fr) minmax(0, 2.3fr);
       gap: 2.2rem;
-    }
-
-    @media (max-width: 900px) {
-      .page { padding: 2.5rem 1.5rem 3rem; }
-      .hero-card { grid-template-columns: 1fr; padding: 1.8rem 1.7rem; }
     }
 
     .hero-left-title {
@@ -172,6 +171,7 @@
       background: rgba(255,255,255,0.07);
       padding: 0.18rem 0.55rem;
       border-radius: 999px;
+      word-break: break-all;
     }
 
     .em {
@@ -186,12 +186,13 @@
       text-transform: uppercase;
       letter-spacing: 0.22em;
       opacity: 0.78;
+      text-align: left;
     }
 
     /* Cards grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 2rem;
     }
 
@@ -213,6 +214,7 @@
       letter-spacing: 0.14em;
       margin-bottom: 0.7rem;
       opacity: 0.95;
+      white-space: nowrap;
     }
 
     .card-title {
@@ -252,6 +254,99 @@
       padding: 0.2rem 0.6rem;
       border-radius: 999px;
       background: rgba(255,255,255,0.07);
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    /* ===================== */
+    /*   RESPONSIVE TWEAKS   */
+    /* ===================== */
+
+    @media (max-width: 900px) {
+      .page {
+        padding: 2.5rem 1.5rem 3rem;
+      }
+
+      .hero-card {
+        grid-template-columns: 1fr;
+        padding: 1.8rem 1.7rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 15px;
+      }
+
+      .page {
+        padding: 2rem 1.1rem 3rem;
+      }
+
+      .title {
+        font-size: 2.2rem;
+        letter-spacing: 0.12em;
+      }
+
+      .subtitle {
+        font-size: 0.95rem;
+      }
+
+      .hero-card {
+        padding: 1.5rem 1.4rem;
+        border-radius: 20px;
+      }
+
+      .hero-left-title,
+      .hero-right-title {
+        font-size: 0.85rem;
+        letter-spacing: 0.12em;
+      }
+
+      .hero-main-text {
+        font-size: 0.95rem;
+      }
+
+      .card {
+        padding: 1.4rem 1.4rem;
+        border-radius: 18px;
+      }
+
+      .card-title {
+        font-size: 1rem;
+      }
+
+      .card-text {
+        font-size: 0.9rem;
+      }
+
+      .card-list {
+        font-size: 0.85rem;
+      }
+
+      .tag {
+        font-size: 0.7rem;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .page {
+        padding: 1.7rem 0.9rem 2.5rem;
+      }
+
+      .title {
+        font-size: 1.9rem;
+        letter-spacing: 0.1em;
+      }
+
+      .hero-card {
+        padding: 1.3rem 1.2rem;
+      }
+
+      .card {
+        padding: 1.2rem 1.1rem;
+      }
     }
   </style>
 </head>
