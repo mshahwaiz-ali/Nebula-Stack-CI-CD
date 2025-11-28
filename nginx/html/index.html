@@ -18,7 +18,7 @@
     body {
       min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 16px;
+      font-size: 17px;
       color: var(--text-main);
       display: flex;
       justify-content: center;
@@ -190,9 +190,9 @@
 
     /* Cards grid */
     .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    gap: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 2rem;
     }
 
     .card {
@@ -260,8 +260,8 @@
     <header class="header">
       <h1 class="title">NebulaStack</h1>
       <p class="subtitle">
-        Mini production-style stack: Nginx web, Flask API, PostgreSQL DB, Docker Compose orchestration,
-        GitHub Actions CI/CD aur AWS EC2 deploy – sab ek place pe.
+        A compact, production-style stack: Nginx web frontend, Flask API, PostgreSQL database, Docker Compose orchestration,
+        GitHub Actions CI/CD, and an AWS EC2 deployment &mdash; all in one place.
       </p>
       <div class="tag-row">
         <span class="tag">Dockerized Stack</span>
@@ -278,10 +278,9 @@
         <div>
           <div class="hero-left-title">Project Snapshot</div>
           <p class="hero-main-text">
-            <span class="hero-highlight">NebulaStack</span> ek simple lekin realistic setup hai:
-            static site Nginx se serve hoti hai, Flask API background me run hoti hai,
-            PostgreSQL messages store karta hai aur sab containers Docker Compose se
-            ek command me start hote hain. GitHub Actions push pe EC2 pe latest version deploy karta hai.
+            <span class="hero-highlight">NebulaStack</span> is a small but realistic environment: Nginx serves the static site,
+            a Flask API runs in the background, PostgreSQL stores messages, and all containers are started with a single
+            Docker Compose command. GitHub Actions deploys the latest version to EC2 on every push to the main branch.
           </p>
           <div class="stack-row">
             <span class="stack-pill">Nginx Web</span>
@@ -293,27 +292,27 @@
           </div>
         </div>
         <div>
-          <div class="hero-right-title">Fast Overview</div>
+          <div class="hero-right-title">Quick Overview</div>
           <ul class="hero-checklist">
             <li>
               <span class="bullet">●</span>
-              <span>Stack start: <span class="endpoint">docker compose up -d --build</span></span>
+              <span>Start the full stack with <span class="endpoint">docker compose up -d --build</span>.</span>
             </li>
             <li>
               <span class="bullet">●</span>
-              <span>Public entry: <span class="endpoint">http://EC2_IP:8080</span></span>
+              <span>Public entry point: <span class="endpoint">http://EC2_IP:8080</span>.</span>
             </li>
             <li>
               <span class="bullet">●</span>
-              <span>API check: <span class="endpoint">/api/health</span>, DB check: <span class="endpoint">/api/db-test</span></span>
+              <span>API health: <span class="endpoint">/api/health</span>, database check: <span class="endpoint">/api/db-test</span>.</span>
             </li>
             <li>
               <span class="bullet">●</span>
-              <span>Messages: <span class="endpoint">/api/messages</span> (list, create, delete)</span>
+              <span>Messages API at <span class="endpoint">/api/messages</span> (list, create, delete).</span>
             </li>
             <li>
               <span class="bullet">●</span>
-              <span>CI/CD: push to <span class="em">main</span> ⇒ build + test + deploy on EC2.</span>
+              <span>CI/CD pipeline: push to <span class="em">main</span> triggers build, tests, and deployment to EC2.</span>
             </li>
           </ul>
         </div>
@@ -322,124 +321,125 @@
 
     <!-- Detail cards -->
     <section>
-      <h2 class="section-heading">Project Breakdown – Components &amp; Features</h2>
+      <h2 class="section-heading">Project Breakdown &mdash; Components and Steps</h2>
       <div class="grid">
 
         <!-- Web / Nginx -->
         <article class="card">
-          <div class="card-badge">Frontend</div>
+          <div class="card-badge">Step 01 &mdash; Frontend</div>
           <h3 class="card-title">Nginx Web Container</h3>
           <p class="card-text">
-            Static HTML/CSS overview page serve karta hai aur port
-            <span class="endpoint">8080</span> expose karta hai. Ye hi entry point user ke liye.
+            Serves the static HTML/CSS overview page and exposes port <span class="endpoint">8080</span>.
+            This container is the main public entry point to NebulaStack.
           </p>
           <ul class="card-list">
-            <li>Base image: <span class="em">nginx:alpine</span>, custom config + site copy.</li>
-            <li>Static files: <span class="endpoint">/usr/share/nginx/html</span> se serve.</li>
-            <li>Check: browser me <span class="endpoint">http://EC2_IP:8080</span> load hona chahiye.</li>
+            <li>Base image <span class="em">nginx:alpine</span> with custom configuration and bundled site assets.</li>
+            <li>Static files are served from <span class="endpoint">/usr/share/nginx/html</span>.</li>
+            <li>Validation: opening <span class="endpoint">http://EC2_IP:8080</span> should render the overview page.</li>
           </ul>
         </article>
 
         <!-- Flask API -->
         <article class="card">
-          <div class="card-badge">Backend API</div>
+          <div class="card-badge">Step 02 &mdash; Backend API</div>
           <h3 class="card-title">Flask Application</h3>
           <p class="card-text">
-            REST API jo health, DB test aur messages endpoints expose karti hai.
-            Nginx ke through <span class="endpoint">/api</span> prefix se access.
+            A Flask-based REST API that exposes health, database test, and message endpoints. It is routed through Nginx
+            under the <span class="endpoint">/api</span> prefix.
           </p>
           <ul class="card-list">
-            <li><span class="endpoint">GET /api/health</span> → <span class="em">{ status: "ok", env: ... }</span></li>
-            <li><span class="endpoint">GET /api/messages</span> → saare messages list.</li>
-            <li><span class="endpoint">POST /api/messages</span> → <span class="em">{ "content": "..." }</span> save.</li>
+            <li><span class="endpoint">GET /api/health</span> &mdash; returns <span class="em">{ status: "ok", env: ... }</span>.</li>
+            <li><span class="endpoint">GET /api/messages</span> &mdash; returns all stored messages.</li>
+            <li><span class="endpoint">POST /api/messages</span> &mdash; accepts <span class="em">{ "content": "..." }</span> and persists it.</li>
           </ul>
         </article>
 
         <!-- Database -->
         <article class="card">
-          <div class="card-badge">Database</div>
-          <h3 class="card-title">PostgreSQL Messages DB</h3>
+          <div class="card-badge">Step 03 &mdash; Database</div>
+          <h3 class="card-title">PostgreSQL Messages Database</h3>
           <p class="card-text">
-            Messages persistent storage PostgreSQL 16 container handle karta hai, API directly is DB se connect hoti hai.
+            A PostgreSQL 16 container provides persistent storage for messages. The API connects directly to this database.
           </p>
           <ul class="card-list">
-            <li>DB: <span class="em">nebulastack / nebula / secretpass</span>.</li>
-            <li>Table: <span class="endpoint">messages(id, content, created_at)</span>.</li>
-            <li>Check: <span class="endpoint">GET /api/db-test</span> simple SELECT 1.</li>
+            <li>Database credentials: <span class="em">nebulastack / nebula / secretpass</span>.</li>
+            <li>Core table: <span class="endpoint">messages(id, content, created_at)</span>.</li>
+            <li>Validation: <span class="endpoint">GET /api/db-test</span> executes a simple <span class="em">SELECT 1</span>.</li>
           </ul>
         </article>
 
         <!-- Docker & Compose -->
         <article class="card">
-          <div class="card-badge">Orchestration</div>
-          <h3 class="card-title">Docker &amp; Docker Compose</h3>
+          <div class="card-badge">Step 04 &mdash; Orchestration</div>
+          <h3 class="card-title">Docker and Docker Compose</h3>
           <p class="card-text">
-            Sab containers ek <span class="em">docker-compose.yml</span> file se manage hote hain – same network, defined ports, restart rules.
+            All containers are orchestrated via a single <span class="em">docker-compose.yml</span>, defining networking,
+            ports, images, and restart behavior.
           </p>
           <ul class="card-list">
-            <li>Services: <span class="em">web</span>, <span class="em">api</span>, <span class="em">postgres</span>.</li>
-            <li>Command: <span class="endpoint">docker compose up -d --build</span>.</li>
-            <li>Internal DNS: service naam hostnames ki tarah kaam karte hain.</li>
+            <li>Services defined for <span class="em">web</span>, <span class="em">api</span>, and <span class="em">postgres</span>.</li>
+            <li>Primary command: <span class="endpoint">docker compose up -d --build</span>.</li>
+            <li>Internal DNS uses service names as hostnames inside the Docker network.</li>
           </ul>
         </article>
 
         <!-- Nginx Reverse Proxy & Security -->
         <article class="card">
-          <div class="card-badge">Routing</div>
-          <h3 class="card-title">Reverse Proxy Config</h3>
+          <div class="card-badge">Step 05 &mdash; Routing</div>
+          <h3 class="card-title">Nginx Reverse Proxy Configuration</h3>
           <p class="card-text">
-            Nginx static site + API dono handle karta hai, aur basic security headers ke options allow karta hai.
+            Nginx handles both the static site and the API, acting as a reverse proxy and enabling room for basic security headers.
           </p>
           <ul class="card-list">
-            <li><span class="endpoint">location /</span> → static HTML response.</li>
-            <li><span class="endpoint">location /api/</span> → proxy to <span class="em">api:5000</span>.</li>
-            <li>Idea: headers jese <span class="em">X-Frame-Options</span>, <span class="em">X-Content-Type-Options</span>.</li>
+            <li><span class="endpoint">location /</span> &mdash; serves the static HTML response.</li>
+            <li><span class="endpoint">location /api/</span> &mdash; proxies traffic to the <span class="em">api:5000</span> container.</li>
+            <li>Configuration can include headers such as <span class="em">X-Frame-Options</span> and <span class="em">X-Content-Type-Options</span>.</li>
           </ul>
         </article>
 
         <!-- CI/CD -->
         <article class="card">
-          <div class="card-badge">CI/CD</div>
+          <div class="card-badge">Step 06 &mdash; CI/CD</div>
           <h3 class="card-title">GitHub Actions Workflow</h3>
           <p class="card-text">
-            Repo pe push hone pe pipeline run hoti hai: code check, image build aur EC2 pe deploy.
+            A GitHub Actions workflow runs on every push to the repository, building and validating the stack before deploying it to EC2.
           </p>
           <ul class="card-list">
-            <li>Job 1: tests + Docker image build/push.</li>
-            <li>Job 2: <span class="endpoint">needs: api-ci</span> ke baad SSH se EC2 login.</li>
-            <li>Deploy: <span class="endpoint">git pull</span> + <span class="endpoint">docker compose up -d --build</span>.</li>
+            <li>Job 1: run tests and build/push Docker images for the application.</li>
+            <li>Job 2: executes after <span class="endpoint">needs: api-ci</span> and connects to EC2 over SSH.</li>
+            <li>Deployment step runs <span class="endpoint">git pull</span> and <span class="endpoint">docker compose up -d --build</span> on the server.</li>
           </ul>
         </article>
 
         <!-- AWS EC2 & SSH -->
         <article class="card">
-          <div class="card-badge">Cloud</div>
-          <h3 class="card-title">AWS EC2 + SSH Secrets</h3>
+          <div class="card-badge">Step 07 &mdash; Cloud Hosting</div>
+          <h3 class="card-title">AWS EC2 and SSH Secrets</h3>
           <p class="card-text">
-            Live stack Ubuntu-based EC2 instance pe run hota hai, jahan Docker + Compose install hai aur repo clone hai.
+            The live environment runs on an Ubuntu-based AWS EC2 instance, with Docker and Docker Compose installed and the repository cloned.
           </p>
           <ul class="card-list">
-            <li>Elastic IP use, taake public IP stable rahe.</li>
-            <li>Secrets:
+            <li>An Elastic IP keeps the public address stable for the deployment.</li>
+            <li>GitHub secrets used by the pipeline:
               <span class="endpoint">EC2_SSH_KEY</span>,
               <span class="endpoint">EC2_HOST</span>,
               <span class="endpoint">EC2_USER</span>.
             </li>
-            <li>Access: <span class="endpoint">ssh ubuntu@EC2_HOST</span> same key se.</li>
+            <li>Manual access uses <span class="endpoint">ssh ubuntu@EC2_HOST</span> with the same key.</li>
           </ul>
         </article>
 
         <!-- Health & Testing -->
         <article class="card">
-          <div class="card-badge">Checks</div>
-          <h3 class="card-title">Health &amp; Quick Tests</h3>
+          <div class="card-badge">Step 08 &mdash; Health and Testing</div>
+          <h3 class="card-title">Runtime Checks and Quick Tests</h3>
           <p class="card-text">
-            Basic curl commands se stack quickly verify kiya ja sakta hai – API, messages aur logs.
+            Simple curl commands are enough to verify that the stack is running correctly and that API routes and persistence are working.
           </p>
           <ul class="card-list">
-            <li>API: <span class="endpoint">curl http://localhost:8080/api/health</span></li>
-            <li>Messages read: <span class="endpoint">curl http://localhost:8080/api/messages</span></li>
-            <li>Messages create (short):
+            <li>API health: <span class="endpoint">curl http://localhost:8080/api/health</span>.</li>
+            <li>List messages: <span class="endpoint">curl http://localhost:8080/api/messages</span>.</li>
+            <li>Create a test message:
               <div class="pill-row">
                 <span class="mini-pill">
                   curl -X POST /api/messages -d '{"content":"test"}'
