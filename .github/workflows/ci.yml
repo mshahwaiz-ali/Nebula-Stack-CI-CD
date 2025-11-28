@@ -30,3 +30,12 @@ jobs:
         run: |
           cd api
           python -m compileall .
+
+      - name: Build API Docker image
+        run: |
+          docker build -t nebulastack-api-text ./api
+      
+      - name: Run API tests
+        run: |
+          cd api
+          pytest
