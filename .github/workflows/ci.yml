@@ -53,4 +53,4 @@ jobs:
       - name: Build and push API image to GHCR
         run: |
           docker build -t $IMAGE_NAME:${{ github.sha }} ./api
-          docker push $IMAGE_NAME:$ {{ github.sha }}
+          docker push $IMAGE_NAME:${{ github.sha }}
