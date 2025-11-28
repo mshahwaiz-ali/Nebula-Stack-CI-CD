@@ -66,8 +66,8 @@ jobs:
       - name: Deploy to EC2
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > /.ssh/ec2_key
-          chmod 600 /.ssh/ec2_key
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key
+          chmod 600 ~/.ssh/ec2_key
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
