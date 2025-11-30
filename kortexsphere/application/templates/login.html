@@ -100,24 +100,32 @@
       <div class="error">{{ error }}</div>
     {% endif %}
 
-    <form method="POST" action="/login">
-      <div class="field">
-        <label>Company code</label>
-        <input name="company_code" placeholder="azure / amazon" autocomplete="off">
-      </div>
+<form method="post" action="/login" autocomplete="off">
+  <div class="field">
+    <label>Company code</label>
+    <input
+      type="text"
+      name="company_code"
+      required
+      placeholder="e.g. azure"
+      autocomplete="off"
+    />
+  </div>
 
-      <div class="field">
-        <label>Email</label>
-        <input name="email" placeholder="azure_admin@example.local" autocomplete="off">
-      </div>
+  <div class="field">
+    <label>Password</label>
+    <input
+      type="password"
+      name="password"
+      required
+      placeholder="Enter password"
+      autocomplete="new-password"
+    />
+  </div>
 
-      <div class="field">
-        <label>Password</label>
-        <input type="password" name="password" value="admin">
-      </div>
+  <button type="submit">Sign in</button>
+</form>
 
-      <button class="btn" type="submit">Sign in</button>
-    </form>
 
     <div class="hint">
       <span class="pill">Demo</span><br>

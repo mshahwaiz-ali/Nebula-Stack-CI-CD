@@ -76,15 +76,13 @@ def login_page():
 @app.post("/login")
 def login_submit():
     company_code = request.form.get("company_code", "").strip().lower()
-    email = request.form.get("email", "").strip().lower()
     password = request.form.get("password", "").strip()
 
-    if not company_code or not email or not password:
+    if not company_code or not password:
         return redirect(url_for("login_page", error="Please fill all fields."))
 
     conn = get_db()
     cur = conn.cursor()
-
     cur.execute(
         """
         SELECT 
@@ -97,18 +95,19 @@ def login_submit():
         FROM app_users u
         JOIN tenants t ON t.id = u.tenant_id
         WHERE t.code = %s
-          AND lower(u.email) = %s
           AND u.password = %s
           AND u.is_active = true
           AND t.is_active = true
+        ORDER BY (u.role = 'admin') DESC, u.created_at ASC
+        LIMIT 1
         """,
-        (company_code, email, password),
+        (company_code, password),
     )
     row = cur.fetchone()
     conn.close()
 
     if not row:
-        return redirect(url_for("login_page", error="Invalid company / email / password."))
+        return redirect(url_for("login_page", error="Invalid company / password."))
 
     session["user_id"] = row["user_id"]
     session["role"] = row["role"]
@@ -118,6 +117,7 @@ def login_submit():
     session["full_name"] = row["full_name"]
 
     return redirect(url_for("dashboard"))
+
 
 
 @app.get("/logout")
