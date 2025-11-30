@@ -36,7 +36,7 @@ services:
 
   kortex-api:
     build:
-      context: ./KortexSphere/application
+      context: ./kortexsphere/application
       dockerfile: Dockerfile
     container_name: kortex-api
     ports:
