@@ -446,15 +446,19 @@
       filter: brightness(1.06);
     }
 
-    /* Small devices */
+    /* Small devices (tablets / medium phones) */
     @media (max-width: 640px) {
       .shell {
         padding: 16px 10px 28px;
+        gap: 16px;
       }
 
       .topbar {
         border-radius: 18px;
         padding: 10px 10px;
+        box-shadow:
+          0 0 16px rgba(59,130,246,0.35),
+          0 16px 26px rgba(15,23,42,0.85);
       }
 
       .brand-text-title {
@@ -463,6 +467,13 @@
 
       .brand-text-sub {
         max-width: 180px;
+      }
+
+      .card {
+        border-radius: 20px;
+        box-shadow:
+          0 12px 26px rgba(15,23,42,0.9),
+          0 0 26px rgba(88,28,135,0.7);
       }
 
       .card-inner {
@@ -484,6 +495,118 @@
 
       th, td {
         padding: 7px 10px;
+      }
+
+      .primary-btn {
+        padding: 7px 12px;
+        font-size: 11px;
+        box-shadow:
+          0 1px 4px rgba(72,64,175,0.45),
+          0 0 18px rgba(129,140,248,0.7);
+      }
+    }
+
+    /* Extra small devices (phones like 12 Pro / Pro Max portrait) */
+    @media (max-width: 480px) {
+      .shell {
+        padding: 14px 8px 24px;
+        gap: 14px;
+      }
+
+      .topbar {
+        padding: 8px 10px;
+        gap: 8px;
+        border-radius: 16px;
+        box-shadow:
+          0 0 12px rgba(59,130,246,0.3),
+          0 12px 22px rgba(15,23,42,0.85);
+      }
+
+      .brand-logo {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+      }
+
+      .brand-text-title {
+        font-size: 13px;
+      }
+
+      .brand-text-sub {
+        font-size: 10px;
+        max-width: 150px;
+      }
+
+      .env-pill {
+        font-size: 10px;
+        padding: 5px 10px;
+      }
+
+      .card {
+        border-radius: 18px;
+        box-shadow:
+          0 10px 20px rgba(15,23,42,0.9),
+          0 0 20px rgba(88,28,135,0.65);
+      }
+
+      .card-inner {
+        padding: 11px 10px 13px;
+      }
+
+      .main-header {
+        gap: 6px;
+      }
+
+      .main-title {
+        font-size: 15px;
+      }
+
+      .main-sub {
+        font-size: 10px;
+      }
+
+      .primary-btn {
+        padding: 7px 11px;
+        font-size: 11px;
+        box-shadow:
+          0 1px 3px rgba(72,64,175,0.4),
+          0 0 14px rgba(129,140,248,0.6);
+      }
+
+      .pill-counter {
+        font-size: 9px;
+        padding: 3px 8px;
+      }
+
+      table {
+        font-size: 11px;
+        min-width: 430px;
+      }
+
+      th, td {
+        padding: 6px 8px;
+      }
+
+      .modal {
+        max-width: 340px;
+        padding: 16px 14px 14px;
+        border-radius: 18px;
+      }
+
+      .modal-title {
+        font-size: 14px;
+      }
+
+      .field-input,
+      .field-select {
+        font-size: 12px;
+        padding: 6px 9px;
+      }
+
+      .btn-secondary,
+      .btn-primary {
+        font-size: 10px;
+        padding: 5px 11px;
       }
     }
   </style>
