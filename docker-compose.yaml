@@ -64,6 +64,7 @@ services:
       POSTGRES_DB: ks_dev
     volumes:
       - kortex_data:/var/lib/postgresql/data
+      - ./kortexsphere/ks_core_master.sql:/docker-entrypoint-initdb.d/01_ks_core_master.sql
     networks:
       - nebula-net
     ports:

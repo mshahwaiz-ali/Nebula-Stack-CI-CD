@@ -32,7 +32,7 @@
 
     .page {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1320px;
       padding: 3.5rem 2rem 4rem;
       margin: 0 auto;
     }
@@ -91,15 +91,16 @@
       width: 100%;
       max-width: 1200px;
       padding: 2.2rem 2.4rem;
-      border-radius: 26px;
+      border-radius: 28px;
       background:
         radial-gradient(circle at top left, rgba(255,255,255,0.11), transparent 55%),
         var(--bg-card);
       border: 1px solid var(--border-soft);
-      box-shadow: 0 26px 70px rgba(0,0,0,0.9);
+      box-shadow: 0 26px 80px rgba(0,0,0,0.95);
       display: grid;
       grid-template-columns: minmax(0, 3.2fr) minmax(0, 2.3fr);
-      gap: 2.2rem;
+      gap: 2.4rem;
+      backdrop-filter: blur(20px);
     }
 
     .hero-left-title {
@@ -132,7 +133,7 @@
       padding: 0.35rem 0.9rem;
       border-radius: 999px;
       font-size: 0.8rem;
-      background: rgba(90,24,154,0.95);
+      background: linear-gradient(135deg, rgba(90,24,154,0.95), rgba(138,43,226,0.95));
       border: 1px solid var(--border-soft);
       white-space: nowrap;
     }
@@ -171,7 +172,12 @@
       background: rgba(255,255,255,0.07);
       padding: 0.18rem 0.55rem;
       border-radius: 999px;
-      word-break: break-all;
+
+      white-space: normal;      /* allows wrapping */
+      overflow-wrap: break-word; /* wraps only between words */
+      word-break: normal;        /* no ugly forced breaking */
+      line-height: 1.4;
+      display: inline-block;     /* pills stay neat */
     }
 
     .em {
@@ -181,83 +187,153 @@
 
     /* Section heading */
     .section-heading {
-      margin: 0 0 1.4rem;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      opacity: 0.78;
-      text-align: left;
+      margin: 0 0 2.5rem;
+      font-size: 2rem;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      opacity: 1;
+      font-weight: 700;
+      text-align: center;
     }
 
-    /* Cards grid */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
+    /* === Premium horizontal cards carousel === */
+
+    .cards-carousel {
+      position: relative;
+      margin: 0 auto;
+      
+    }
+    .cards-carousel::before,
+    .cards-carousel::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 90px;         /* fade length */
+      height: 100%;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: ;
+    }
+
+
+
+    .cards-track {
+      display: flex;
+      gap: 1.8rem;
+      overflow-x: auto;
+      padding: 0.6rem 0 1.8rem;
+      scroll-snap-type: none;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+    }
+
+    .cards-track.dragging {
+      cursor: grabbing;
+      
+      
+    }
+
+    .cards-track::-webkit-scrollbar {
+      height: 6px;
+      
+    }
+
+    .cards-track::-webkit-scrollbar-track {
+      background: transparent;
+      
+    }
+
+    .cards-track::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 999px;
+      
     }
 
     .card {
-      padding: 1.8rem 1.9rem;
-      border-radius: 22px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.85);
+  flex: 0 0 520px;
+  max-width: 520px;
+  padding: 1.8rem 1.6rem 1.2rem;  /* ⬅️ top thoda zyada, bottom kam */
+  border-radius: 24px;
+  
+  background:
+    radial-gradient(circle at 50% 15%, rgba(255,255,255,0.08), transparent 55%),
+    var(--bg-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 26px 70px rgba(0,0,0,0.9);
+  scroll-snap-align: none;
+  backdrop-filter: blur(18px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  overflow: hidden;   /* ⬅️ extra safety */
+}
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 32px 90px rgba(0,0,0,1);
+      border-color: rgba(255,255,255,0.35);
     }
 
     .card-badge {
       display: inline-block;
-      padding: 0.2rem 0.7rem;
+      
+      padding: 0.25rem 0.85rem;
       border-radius: 999px;
-      background: rgba(90, 24, 154, 0.9);
+      background: linear-gradient(135deg, #ffcd88, #ff7bff);
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.9rem;
       opacity: 0.95;
       white-space: nowrap;
+      color: #2a123f;
+      font-weight: 600;
     }
 
     .card-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
+      font-size: 1.15rem;
+      
+      font-weight: 750;
+      margin-bottom: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
 
     .card-text {
-      font-size: 0.95rem;
-      line-height: 1.7;
+      font-size: 0.96rem;
+      
+      line-height: 1.75;
       opacity: 0.96;
-      margin-bottom: 0.9rem;
+      margin-bottom: 1rem;
     }
 
     .card-list {
       font-size: 0.9rem;
       list-style: none;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     .card-list li {
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.4rem;
     }
 
     .pill-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
+
       margin-top: 0.3rem;
     }
 
     .mini-pill {
       font-size: 0.8rem;
-      padding: 0.2rem 0.6rem;
+      
+      padding: 0.4rem 0.8rem;
       border-radius: 999px;
       background: rgba(255,255,255,0.07);
       max-width: 100%;
       overflow-x: auto;
-      white-space: nowrap;
+      white-space: normal;
       display: inline-block;
+      line-height: 1.4;
     }
 
     /* ===================== */
@@ -271,7 +347,17 @@
 
       .hero-card {
         grid-template-columns: 1fr;
-        padding: 1.8rem 1.7rem;
+        padding: 1.8rem 1.8rem;
+      }
+
+      .cards-track {
+        gap: 1.2rem;
+      }
+
+      .card {
+        flex: 0 0 84vw;
+        max-width: 84vw;
+        padding: 1.3rem 1.4rem;
       }
     }
 
@@ -294,27 +380,19 @@
       }
 
       .hero-card {
-        padding: 1.5rem 1.4rem;
-        border-radius: 20px;
-      }
-
-      .hero-left-title,
-      .hero-right-title {
-        font-size: 0.85rem;
-        letter-spacing: 0.12em;
-      }
-
-      .hero-main-text {
-        font-size: 0.95rem;
+        padding: 1.6rem 1.5rem;
+        border-radius: 22px;
       }
 
       .card {
-        padding: 1.4rem 1.4rem;
-        border-radius: 18px;
+        padding: 1.2rem 1.2rem;
+        border-radius: 20px;
+        flex: 0 0 88vw;
+        max-width: 88vw;
       }
 
       .card-title {
-        font-size: 1rem;
+        font-size: 1.02rem;
       }
 
       .card-text {
@@ -345,7 +423,9 @@
       }
 
       .card {
-        padding: 1.2rem 1.1rem;
+        padding: 1.1rem 1.1rem;
+        flex: 0 0 90vw;
+        max-width: 90vw;
       }
     }
   </style>
@@ -378,8 +458,6 @@
         KortexSphere Project
       </a>
     </nav>
-
-
 
     <header class="header">
       <h1 class="title">NebulaStack</h1>
@@ -443,138 +521,196 @@
       </div>
     </section>
 
-    <!-- Detail cards -->
+    <!-- Detail cards as draggable carousel -->
     <section>
-      <h2 class="section-heading">Project Breakdown &mdash; Components and Steps</h2>
-      <div class="grid">
+      <h2 class="section-heading">NebulaStack Project Breakdown</h2>
 
-        <!-- Web / Nginx -->
-        <article class="card">
-          <div class="card-badge">Step 01 &mdash; Frontend</div>
-          <h3 class="card-title">Nginx Web Container</h3>
-          <p class="card-text">
-            Serves the static HTML/CSS overview page and exposes port <span class="endpoint">8080</span>.
-            This container is the main public entry point to NebulaStack.
-          </p>
-          <ul class="card-list">
-            <li>Base image <span class="em">nginx:alpine</span> with custom configuration and bundled site assets.</li>
-            <li>Static files are served from <span class="endpoint">/usr/share/nginx/html</span>.</li>
-            <li>Validation: opening <span class="endpoint">http://EC2_IP:8080</span> should render the overview page.</li>
-          </ul>
-        </article>
+      <div class="cards-carousel">
+        <div class="cards-track" id="cards-track">
+          <!-- Web / Nginx -->
+          <article class="card">
+            <div class="card-badge">Step 01 &mdash; Frontend</div>
+            <h3 class="card-title">Nginx Web Container</h3>
+            <p class="card-text">
+              Serves the static HTML/CSS overview page and exposes port <span class="endpoint">8080</span>.
+              This container is the main public entry point to NebulaStack.
+            </p>
+            <ul class="card-list">
+              <li>Base image <span class="em">nginx:alpine</span> with custom configuration and bundled site assets.</li>
+              <li>Static files are served from <span class="endpoint">/usr/share/nginx/html</span>.</li>
+              <li>Validation: opening <span class="endpoint">http://EC2_IP:8080</span> should render the overview page.</li>
+            </ul>
+          </article>
 
-        <!-- Flask API -->
-        <article class="card">
-          <div class="card-badge">Step 02 &mdash; Backend API</div>
-          <h3 class="card-title">Flask Application</h3>
-          <p class="card-text">
-            A Flask-based REST API that exposes health, database test, and message endpoints. It is routed through Nginx
-            under the <span class="endpoint">/api</span> prefix.
-          </p>
-          <ul class="card-list">
-            <li><span class="endpoint">GET /api/health</span> &mdash; returns <span class="em">{ status: "ok", env: ... }</span>.</li>
-            <li><span class="endpoint">GET /api/messages</span> &mdash; returns all stored messages.</li>
-            <li><span class="endpoint">POST /api/messages</span> &mdash; accepts <span class="em">{ "content": "..." }</span> and persists it.</li>
-          </ul>
-        </article>
+          <!-- Flask API -->
+          <article class="card">
+            <div class="card-badge">Step 02 &mdash; Backend API</div>
+            <h3 class="card-title">Flask Application</h3>
+            <p class="card-text">
+              A Flask-based REST API that exposes health, database test, and message endpoints. It is routed through Nginx
+              under the <span class="endpoint">/api</span> prefix.
+            </p>
+            <ul class="card-list">
+              <li><span class="endpoint">GET /api/health</span> &mdash; returns <span class="em">{ status: "ok", env: ... }</span>.</li>
+              <li><span class="endpoint">GET /api/messages</span> &mdash; returns all stored messages.</li>
+              <li><span class="endpoint">POST /api/messages</span> &mdash; accepts <span class="em">{ "content": "..." }</span> and persists it.</li>
+            </ul>
+          </article>
 
-        <!-- Database -->
-        <article class="card">
-          <div class="card-badge">Step 03 &mdash; Database</div>
-          <h3 class="card-title">PostgreSQL Messages Database</h3>
-          <p class="card-text">
-            A PostgreSQL 16 container provides persistent storage for messages. The API connects directly to this database.
-          </p>
-          <ul class="card-list">
-            <li>Database credentials: <span class="em">nebulastack / nebula / secretpass</span>.</li>
-            <li>Core table: <span class="endpoint">messages(id, content, created_at)</span>.</li>
-            <li>Validation: <span class="endpoint">GET /api/db-test</span> executes a simple <span class="em">SELECT 1</span>.</li>
-          </ul>
-        </article>
+          <!-- Database -->
+          <article class="card">
+            <div class="card-badge">Step 03 &mdash; Database</div>
+            <h3 class="card-title">PostgreSQL Messages Database</h3>
+            <p class="card-text">
+              A PostgreSQL 16 container provides persistent storage for messages. The API connects directly to this database.
+            </p>
+            <ul class="card-list">
+              <li>Database credentials: <span class="em">nebulastack / nebula / secretpass</span>.</li>
+              <li>Core table: <span class="endpoint">messages(id, content, created_at)</span>.</li>
+              <li>Validation: <span class="endpoint">GET /api/db-test</span> executes a simple <span class="em">SELECT 1</span>.</li>
+            </ul>
+          </article>
 
-        <!-- Docker & Compose -->
-        <article class="card">
-          <div class="card-badge">Step 04 &mdash; Orchestration</div>
-          <h3 class="card-title">Docker and Docker Compose</h3>
-          <p class="card-text">
-            All containers are orchestrated via a single <span class="em">docker-compose.yml</span>, defining networking,
-            ports, images, and restart behavior.
-          </p>
-          <ul class="card-list">
-            <li>Services defined for <span class="em">web</span>, <span class="em">api</span>, and <span class="em">postgres</span>.</li>
-            <li>Primary command: <span class="endpoint">docker compose up -d --build</span>.</li>
-            <li>Internal DNS uses service names as hostnames inside the Docker network.</li>
-          </ul>
-        </article>
+          <!-- Docker & Compose -->
+          <article class="card">
+            <div class="card-badge">Step 04 &mdash; Orchestration</div>
+            <h3 class="card-title">Docker and Docker Compose</h3>
+            <p class="card-text">
+              All containers are orchestrated via a single <span class="em">docker-compose.yml</span>, defining networking,
+              ports, images, and restart behavior.
+            </p>
+            <ul class="card-list">
+              <li>Services defined for <span class="em">web</span>, <span class="em">api</span>, and <span class="em">postgres</span>.</li>
+              <li>Primary command: <span class="endpoint">docker compose up -d --build</span>.</li>
+              <li>Internal DNS uses service names as hostnames inside the Docker network.</li>
+            </ul>
+          </article>
 
-        <!-- Nginx Reverse Proxy & Security -->
-        <article class="card">
-          <div class="card-badge">Step 05 &mdash; Routing</div>
-          <h3 class="card-title">Nginx Reverse Proxy Configuration</h3>
-          <p class="card-text">
-            Nginx handles both the static site and the API, acting as a reverse proxy and enabling room for basic security headers.
-          </p>
-          <ul class="card-list">
-            <li><span class="endpoint">location /</span> &mdash; serves the static HTML response.</li>
-            <li><span class="endpoint">location /api/</span> &mdash; proxies traffic to the <span class="em">api:5000</span> container.</li>
-            <li>Configuration can include headers such as <span class="em">X-Frame-Options</span> and <span class="em">X-Content-Type-Options</span>.</li>
-          </ul>
-        </article>
+          <!-- Nginx Reverse Proxy & Security -->
+          <article class="card">
+            <div class="card-badge">Step 05 &mdash; Routing</div>
+            <h3 class="card-title">Nginx Reverse Proxy Configuration</h3>
+            <p class="card-text">
+              Nginx handles both the static site and the API, acting as a reverse proxy and enabling room for basic security headers.
+            </p>
+            <ul class="card-list">
+              <li><span class="endpoint">location /</span> &mdash; serves the static HTML response.</li>
+              <li><span class="endpoint">location /api/</span> &mdash; proxies traffic to the <span class="em">api:5000</span> container.</li>
+              <li>Configuration can include headers such as <span class="em">X-Frame-Options</span> and <span class="em">X-Content-Type-Options</span>.</li>
+            </ul>
+          </article>
 
-        <!-- CI/CD -->
-        <article class="card">
-          <div class="card-badge">Step 06 &mdash; CI/CD</div>
-          <h3 class="card-title">GitHub Actions Workflow</h3>
-          <p class="card-text">
-            A GitHub Actions workflow runs on every push to the repository, building and validating the stack before deploying it to EC2.
-          </p>
-          <ul class="card-list">
-            <li>Job 1: run tests and build/push Docker images for the application.</li>
-            <li>Job 2: executes after <span class="endpoint">needs: api-ci</span> and connects to EC2 over SSH.</li>
-            <li>Deployment step runs <span class="endpoint">git pull</span> and <span class="endpoint">docker compose up -d --build</span> on the server.</li>
-          </ul>
-        </article>
+          <!-- CI/CD -->
+          <article class="card">
+            <div class="card-badge">Step 06 &mdash; CI/CD</div>
+            <h3 class="card-title">GitHub Actions Workflow</h3>
+            <p class="card-text">
+              A GitHub Actions workflow runs on every push to the repository, building and validating the stack before deploying it to EC2.
+            </p>
+            <ul class="card-list">
+              <li>Job 1: run tests and build/push Docker images for the application.</li>
+              <li>Job 2: executes after <span class="endpoint">needs: api-ci</span> and connects to EC2 over SSH.</li>
+              <li>Deployment step runs <span class="endpoint">git pull</span> and <span class="endpoint">docker compose up -d --build</span> on the server.</li>
+            </ul>
+          </article>
 
-        <!-- AWS EC2 & SSH -->
-        <article class="card">
-          <div class="card-badge">Step 07 &mdash; Cloud Hosting</div>
-          <h3 class="card-title">AWS EC2 and SSH Secrets</h3>
-          <p class="card-text">
-            The live environment runs on an Ubuntu-based AWS EC2 instance, with Docker and Docker Compose installed and the repository cloned.
-          </p>
-          <ul class="card-list">
-            <li>An Elastic IP keeps the public address stable for the deployment.</li>
-            <li>GitHub secrets used by the pipeline:
-              <span class="endpoint">EC2_SSH_KEY</span>,
-              <span class="endpoint">EC2_HOST</span>,
-              <span class="endpoint">EC2_USER</span>.
-            </li>
-            <li>Manual access uses <span class="endpoint">ssh ubuntu@EC2_HOST</span> with the same key.</li>
-          </ul>
-        </article>
+          <!-- AWS EC2 & SSH -->
+          <article class="card">
+            <div class="card-badge">Step 07 &mdash; Cloud Hosting</div>
+            <h3 class="card-title">AWS EC2 and SSH Secrets</h3>
+            <p class="card-text">
+              The live environment runs on an Ubuntu-based AWS EC2 instance, with Docker and Docker Compose installed and the repository cloned.
+            </p>
+            <ul class="card-list">
+              <li>An Elastic IP keeps the public address stable for the deployment.</li>
+              <li>GitHub secrets used by the pipeline:
+                <span class="endpoint">EC2_SSH_KEY</span>,
+                <span class="endpoint">EC2_HOST</span>,
+                <span class="endpoint">EC2_USER</span>.
+              </li>
+              <li>Manual access uses <span class="endpoint">ssh ubuntu@EC2_HOST</span> with the same key.</li>
+            </ul>
+          </article>
 
-        <!-- Health & Testing -->
-        <article class="card">
-          <div class="card-badge">Step 08 &mdash; Health and Testing</div>
-          <h3 class="card-title">Runtime Checks and Quick Tests</h3>
-          <p class="card-text">
-            Simple curl commands are enough to verify that the stack is running correctly and that API routes and persistence are working.
-          </p>
-          <ul class="card-list">
-            <li>API health: <span class="endpoint">curl http://localhost:8080/api/health</span>.</li>
-            <li>List messages: <span class="endpoint">curl http://localhost:8080/api/messages</span>.</li>
-            <li>Create a test message:
-              <div class="pill-row">
-                <span class="mini-pill">
-                  curl -X POST /api/messages -d '{"content":"test"}'
-                </span>
-              </div>
-            </li>
-          </ul>
-        </article>
-
+          <!-- Health & Testing -->
+          <article class="card">
+            <div class="card-badge">Step 08 &mdash; Health and Testing</div>
+            <h3 class="card-title">Runtime Checks and Quick Tests</h3>
+            <p class="card-text">
+              Simple curl commands are enough to verify that the stack is running correctly and that API routes and persistence are working.
+            </p>
+            <ul class="card-list">
+              <li>API health: <span class="endpoint">curl http://localhost:8080/api/health</span>.</li>
+              <li>List messages: <span class="endpoint">curl http://localhost:8080/api/messages</span>.</li>
+              <li>Create a test message:
+                <div class="pill-row">
+                  <span class="mini-pill">
+                    curl -X POST /api/messages -d '{"content":"test"}'
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </article>
+        </div>
       </div>
     </section>
   </div>
+
+  <script>
+    // Drag-to-scroll (no loop, single pass)
+    const track = document.getElementById('cards-track');
+    if (track) {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      const startDrag = (x) => {
+        isDown = true;
+        track.classList.add('dragging');
+        startX = x - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      };
+
+      const moveDrag = (x) => {
+        if (!isDown) return;
+        const walk = (x - startX) * 1.5;
+        track.scrollLeft = scrollLeft - walk;
+      };
+
+      const endDrag = () => {
+        isDown = false;
+        track.classList.remove('dragging');
+      };
+
+      // Mouse events
+      track.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startDrag(e.pageX);
+      });
+
+      window.addEventListener('mouseup', endDrag);
+      window.addEventListener('mouseleave', endDrag);
+
+      track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        moveDrag(e.pageX);
+      });
+
+      // Touch events
+      track.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        startDrag(touch.pageX);
+      }, { passive: true });
+
+      track.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        moveDrag(touch.pageX);
+      }, { passive: true });
+
+      track.addEventListener('touchend', endDrag);
+      track.addEventListener('touchcancel', endDrag);
+    }
+  </script>
 </body>
 </html>
