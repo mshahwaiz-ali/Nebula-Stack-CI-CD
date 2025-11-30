@@ -10,7 +10,8 @@ WORKDIR /app
 
 # Copy requirements (agar file ka naam different ho to yahan change karna)
 COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir psycopg2-binary && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . /app
