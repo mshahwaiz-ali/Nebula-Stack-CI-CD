@@ -7,6 +7,8 @@ services:
     depends_on:
       - api
     restart: unless-stopped
+    networks:
+      - nebula-net
 
   api:
     build: ./api
@@ -20,6 +22,8 @@ services:
       - DB_USER=nebula
       - DB_PASS=secretpass
     restart: unless-stopped
+    networks:
+      - nebula-net
 
   postgres:
     image: postgres:16-alpine
@@ -45,7 +49,7 @@ services:
       DB_HOST: kortex-db
       DB_NAME: ks_dev
       DB_USER: ks_admin
-      DB_PASSWORD: admin
+      DB_PASS: admin
     depends_on:
       - kortex-db
     networks:
