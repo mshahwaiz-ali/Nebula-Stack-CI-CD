@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ tenant_name }} – Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #5e3bff, #130022 55%, #020008 100%);
+      color: #f5f5ff;
+      padding: 32px;
+    }
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .title {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: #c4c4ff;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.16);
+      font-size: 0.75rem;
+      margin-left: 8px;
+    }
+    .logout {
+      font-size: 0.8rem;
+      color: #fca5a5;
+      text-decoration: none;
+    }
+    .logout:hover { text-decoration: underline; }
+
+    .tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 3px;
+      margin-bottom: 18px;
+    }
+    .tab {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      text-decoration: none;
+      color: #e5e7ff;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, #a855ff, #6366f1);
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+      gap: 18px;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.86);
+      border-radius: 18px;
+      padding: 16px 18px;
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(16px);
+    }
+    .card h3 {
+      font-size: 0.98rem;
+      margin-bottom: 8px;
+    }
+    .card-sub {
+      font-size: 0.78rem;
+      color: #a5b4fc;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    th, td {
+      padding: 6px 4px;
+      text-align: left;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+    }
+    th {
+      font-weight: 600;
+      color: #c7d2fe;
+    }
+    .status-pill {
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      background: rgba(52, 211, 153, 0.16);
+    }
+    .status-pill.draft {
+      background: rgba(249, 115, 22, 0.16);
+    }
+    .small-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      background: rgba(248, 113, 113, 0.15);
+      color: #fecaca;
+    }
+    .small-btn:hover {
+      background: rgba(248, 113, 113, 0.3);
+    }
+    .field {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      font-size: 0.78rem;
+      margin-bottom: 3px;
+      color: #c7d2fe;
+    }
+    input, select {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 233, 0.7);
+      background: rgba(15, 23, 42, 0.95);
+      color: #f9fafb;
+      font-size: 0.82rem;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #a855ff;
+      box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.5);
+    }
+    .btn-primary {
+      margin-top: 4px;
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #a855ff, #6366f1, #06b6d4);
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.05);
+    }
+    .hint {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: #9ca3ff;
+    }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.18);
+      font-size: 0.7rem;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="header">
+      <div>
+        <div class="title">
+          {{ tenant_name }} – Dashboard
+          <span class="badge">{{ role }}</span>
+        </div>
+        <div class="subtitle">
+          Welcome, {{ full_name }} – manage your tenant data safely via RLS.
+        </div>
+      </div>
+      <div>
+        <a class="logout" href="/logout">Logout</a>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <a href="/dashboard?tab=projects"
+         class="tab {% if tab == 'projects' %}active{% endif %}">Projects</a>
+      <a href="/dashboard?tab=users"
+         class="tab {% if tab == 'users' %}active{% endif %}">Users</a>
+    </div>
+
+    {% if tab == 'projects' %}
+      <div class="grid">
+        <div class="card">
+          <h3>Projects</h3>
+          <div class="card-sub">All projects for this company only (RLS enforced).</div>
+
+          {% if projects %}
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Budget</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in projects %}
+              <tr>
+                <td>{{ p.name }}</td>
+                <td>
+                  <span class="status-pill {% if p.status == 'draft' %}draft{% endif %}">
+                    {{ p.status }}
+                  </span>
+                </td>
+                <td>{{ "%.2f"|format(p.budget) }}</td>
+                <td>
+                  {% if role in ['admin','writer'] %}
+                    <form method="POST" action="/projects/delete/{{ p.id }}" style="display:inline;">
+                      <button class="small-btn" type="submit">Delete</button>
+                    </form>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+            <div class="hint">No projects yet for this tenant.</div>
+          {% endif %}
+        </div>
+
+        <div class="card">
+          <h3>Create project</h3>
+          <div class="card-sub">Insert directly into the tenant-scoped table.</div>
+
+          {% if role not in ['admin','writer'] %}
+            <div class="hint">
+              <span class="pill">Read only</span>
+              Your role can't create or edit projects.
+            </div>
+          {% else %}
+            <form method="POST" action="/projects/create">
+              <div class="field">
+                <label>Project name</label>
+                <input name="name" placeholder="New initiative">
+              </div>
+              <div class="field">
+                <label>Status</label>
+                <select name="status">
+                  <option value="draft">draft</option>
+                  <option value="active">active</option>
+                  <option value="paused">paused</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Budget</label>
+                <input name="budget" placeholder="50000">
+              </div>
+              <button class="btn-primary" type="submit">Add project</button>
+            </form>
+            <div class="hint">
+              Data will only affect <strong>{{ tenant_name }}</strong>, never other companies.
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="grid">
+        <div class="card">
+          <h3>Users</h3>
+          <div class="card-sub">Tenant users (admin / writer / readonly).</div>
+
+          {% if users %}
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Active</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in users %}
+              <tr>
+                <td>{{ u.email }}</td>
+                <td>{{ u.full_name }}</td>
+                <td>{{ u.role }}</td>
+                <td>{{ 'yes' if u.is_active else 'no' }}</td>
+                <td>
+                  {% if role == 'admin' %}
+                    <form method="POST" action="/users/delete/{{ u.id }}" style="display:inline;">
+                      <button class="small-btn" type="submit">Delete</button>
+                    </form>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+            <div class="hint">No users yet for this tenant (besides you).</div>
+          {% endif %}
+        </div>
+
+        <div class="card">
+          <h3>Create user</h3>
+          <div class="card-sub">Admins can invite more users to this tenant.</div>
+
+          {% if role != 'admin' %}
+            <div class="hint">
+              <span class="pill">Admin only</span>
+              Only admins can create users.
+            </div>
+          {% else %}
+            <form method="POST" action="/users/create">
+              <div class="field">
+                <label>Email</label>
+                <input name="email" placeholder="user@example.local">
+              </div>
+              <div class="field">
+                <label>Full name</label>
+                <input name="full_name" placeholder="Team member name">
+              </div>
+              <div class="field">
+                <label>Role</label>
+                <select name="role">
+                  <option value="writer">writer</option>
+                  <option value="readonly">readonly</option>
+                  <option value="admin">admin</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Password</label>
+                <input name="password" placeholder="leave blank for 'admin'">
+              </div>
+
+              <button class="btn-primary" type="submit">Add user</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -21,7 +21,6 @@ services:
       - DB_PASS=secretpass
     restart: unless-stopped
 
-
   postgres:
     image: postgres:16-alpine
     container_name: nebulastack-db
@@ -35,9 +34,41 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
-volumes:
-    db-data:
-  
+  kortex-api:
+    build:
+      context: ./KortexSphere/application
+      dockerfile: Dockerfile
+    container_name: kortex-api
+    ports:
+      - "5001:5000"
+    environment:
+      DB_HOST: kortex-db
+      DB_NAME: ks_dev
+      DB_USER: ks_admin
+      DB_PASSWORD: admin
+    depends_on:
+      - kortex-db
+    networks:
+      - nebula-net
 
-   
-  
+  kortex-db:
+    image: postgres:16
+    container_name: kortex-db
+    environment:
+      POSTGRES_USER: ks_admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ks_dev
+    volumes:
+      - kortex_data:/var/lib/postgresql/data
+    networks:
+      - nebula-net
+    ports:
+      - "5450:5432"
+
+volumes:
+  db-data:
+  kortex_data:
+
+networks:
+  nebula-net:
+    driver: bridge
