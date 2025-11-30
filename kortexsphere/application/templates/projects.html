@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>KortexSphere – Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
   <style>
     * {
       margin: 0;
@@ -25,7 +27,7 @@
     .shell {
       max-width: 1120px;
       margin: 0 auto;
-      padding: 24px 16px 40px;
+      padding: 20px 16px 40px;
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -35,7 +37,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 18px;
+      padding: 10px 14px;
       border-radius: 999px;
       background: linear-gradient(120deg, rgba(15,23,42,0.9), rgba(30,64,175,0.9));
       border: 1px solid rgba(148,163,184,0.4);
@@ -43,12 +45,15 @@
         0 0 24px rgba(59,130,246,0.45),
         0 24px 40px rgba(15,23,42,0.85);
       backdrop-filter: blur(18px);
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
     }
 
     .brand-logo {
@@ -65,19 +70,24 @@
       box-shadow:
         0 0 18px rgba(129,140,248,0.9),
         0 0 40px rgba(56,189,248,0.6);
+      flex-shrink: 0;
     }
 
     .brand-text-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #e5e7eb;
+      white-space: nowrap;
     }
 
     .brand-text-sub {
       font-size: 11px;
       color: #9ca3af;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .env-pill {
@@ -89,6 +99,7 @@
       color: #bbf7d0;
       text-transform: uppercase;
       letter-spacing: 0.12em;
+      white-space: nowrap;
     }
 
     .layout {
@@ -116,7 +127,7 @@
     }
 
     .card-inner {
-      padding: 16px 16px 18px;
+      padding: 14px 14px 16px;
     }
 
     .card-title {
@@ -185,7 +196,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
       margin-bottom: 10px;
+      flex-wrap: wrap;
     }
 
     .main-title {
@@ -208,15 +221,16 @@
       padding: 8px 14px;
       border-radius: 999px;
       border: 1px solid rgba(129,140,248,0.9);
-      background: radial-gradient(circle at 0 0, rgba(248,250,252,0.15), transparent 45%),
+      background: radial-gradient(circle at 0 0, rgba(248,250,252,0.15), transparent 55%),
                   linear-gradient(135deg, #4c1d95, #1d4ed8);
       color: #f9fafb;
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
       box-shadow:
-        0 12px 24px rgba(30,64,175,0.8),
+        0 1px 5px rgba(72,64,175,0.5),
         0 0 24px rgba(129,140,248,0.9);
+      white-space: nowrap;
     }
 
     .primary-btn:hover {
@@ -234,14 +248,16 @@
 
     .table-wrap {
       border-radius: 18px;
-      overflow: hidden;
       border: 1px solid rgba(55,65,81,0.9);
       background: radial-gradient(circle at 100% 0, rgba(59,130,246,0.18) 0, transparent 40%),
                   rgba(15,23,42,0.96);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
+      min-width: 520px;
       border-collapse: collapse;
       font-size: 13px;
     }
@@ -428,6 +444,47 @@
 
     .btn-primary:hover {
       filter: brightness(1.06);
+    }
+
+    /* Small devices */
+    @media (max-width: 640px) {
+      .shell {
+        padding: 16px 10px 28px;
+      }
+
+      .topbar {
+        border-radius: 18px;
+        padding: 10px 10px;
+      }
+
+      .brand-text-title {
+        font-size: 14px;
+      }
+
+      .brand-text-sub {
+        max-width: 180px;
+      }
+
+      .card-inner {
+        padding: 12px 12px 14px;
+      }
+
+      .main-title {
+        font-size: 16px;
+      }
+
+      .table-wrap {
+        border-radius: 14px;
+      }
+
+      table {
+        font-size: 12px;
+        min-width: 480px;
+      }
+
+      th, td {
+        padding: 7px 10px;
+      }
     }
   </style>
 </head>
