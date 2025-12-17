@@ -1,3 +1,0 @@
-Access_Token for git repo Ec2 Deploy
-
-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
