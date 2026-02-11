@@ -1,7 +1,28 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nebulastack-db
+    environment:
+      POSTGRES_DB: nebulastack
+      POSTGRES_USER: nebula
+      POSTGRES_PASSWORD: secretpass
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
   api:
     image: ghcr.io/mshahwaiz-ali/nebulastack-api:latest
     container_name: nebulastack-api
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_NAME: nebulastack
+      DB_USER: nebula
+      DB_PASS: secretpass
     ports:
       - "5000:5000"
     restart: unless-stopped
+
+volumes:
+  db-data:
