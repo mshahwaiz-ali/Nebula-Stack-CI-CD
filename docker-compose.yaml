@@ -1,5 +1,6 @@
 services:
   web:
+    image: ghcr.io/mshahwaiz-alix/nebulastack-web:latest
     build: ./nginx
     container_name: nebulastack-web
     ports:
@@ -11,6 +12,7 @@ services:
       - nebula-net
 
   api:
+    image: ghcr.io/mshahwaiz-alix/nebulastack-api:latest
     build: ./api
     container_name: nebulastack-api
     ports:

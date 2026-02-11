@@ -1,74 +1,59 @@
-name: NebulaStack CI
-
+name: NebulaStack CI CD
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
+    branches: [ "main" ]
 
 permissions:
   contents: read
   packages: write
 
 jobs:
-  api-ci:
+  build-and-push:
     runs-on: ubuntu-latest
-    env:
-      REGISTRY: ghr.io
-      IMAGE_NAME: ghcr.io/mshahwaiz-alix/nebulastack-api
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-    
-      - name: Install Deps (api)
-        run: |
-          cd api
-          if [ -f requirements.txt ]; then
-            pip install -r requirements.txt
-          fi
+      - name: Login to GHCR (for push)
+        run: echo "${{ github.token }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
-      - name: Basic syntax check
+      # Build + Push API
+      - name: Build and push API image
         run: |
-          cd api
-          python -m compileall .
+          IMAGE="ghcr.io/mshahwaiz-alix/nebulastack-api"
+          docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest ./api
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
 
-      - name: Build API Docker image
+      # OPTIONAL: Build + Push WEB (only if you use it in prod compose)
+      - name: Build and push WEB image
         run: |
-          docker build -t nebulastack-api-text ./api
-      
-      - name: Run API tests
-        run: |
-          cd api
-          pytest
-      
-      - name: Login to GHCR
-        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          IMAGE="ghcr.io/mshahwaiz-alix/nebulastack-web"
+          docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest ./nginx
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
 
-      - name: Build and push API image to GHCR
-        run: |
-          docker build -t $IMAGE_NAME:${{ github.sha }} ./api
-          docker push $IMAGE_NAME:${{ github.sha }}
-  
   deploy:
-    needs: api-ci
+    needs: build-and-push
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Deploy to EC2
+      - name: Deploy to EC2 (pull + restart)
         run: |
+          set -e
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key
           chmod 600 ~/.ssh/ec2_key
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-            'cd Nebula-Stack-CI-CD && git pull && docker compose up -d --build'
+            'set -e
+             cd /opt/nebulastack
+             git pull
+             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
+             docker compose -f docker-compose.prod.yml pull
+             docker compose -f docker-compose.prod.yml up -d
+             docker image prune -f
+            '
