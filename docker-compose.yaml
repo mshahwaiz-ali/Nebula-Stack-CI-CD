@@ -1,80 +1,50 @@
 services:
-  web:
-    image: ghcr.io/mshahwaiz-alix/nebulastack-web:latest
-    build: ./nginx
-    container_name: nebulastack-web
-    ports:
-      - "8080:80"
-    depends_on:
-      - api
-    restart: unless-stopped
-    networks:
-      - nebula-net
-
-  api:
-    image: ghcr.io/mshahwaiz-alix/nebulastack-api:latest
-    build: ./api
-    container_name: nebulastack-api
-    ports:
-      - "5000:5000"
-    environment:
-      - APP_ENV=production
-      - DB_HOST=postgres
-      - DB_NAME=nebulastack
-      - DB_USER=nebula
-      - DB_PASS=secretpass
-    restart: unless-stopped
-    networks:
-      - nebula-net
-
   postgres:
     image: postgres:16-alpine
     container_name: nebulastack-db
     environment:
-      - POSTGRES_DB=nebulastack
-      - POSTGRES_USER=nebula
-      - POSTGRES_PASSWORD=secretpass
+      POSTGRES_DB: nebulastack
+      POSTGRES_USER: nebula
+      POSTGRES_PASSWORD: secretpass
     volumes:
       - db-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     restart: unless-stopped
+    networks:
+      - nebula-net
+    # DO NOT expose DB publicly in prod
+    # ports:
+    #   - "5432:5432"
 
-  kortex-api:
-    build:
-      context: ./kortexsphere/application
-      dockerfile: Dockerfile
-    container_name: kortex-api
-    ports:
-      - "5001:5000"
-    environment:
-      DB_HOST: kortex-db
-      DB_NAME: ks_dev
-      DB_USER: ks_admin
-      DB_PASS: admin
+  api:
+    image: ghcr.io/mshahwaiz-ali/nebulastack-api:latest
+    container_name: nebulastack-api
     depends_on:
-      - kortex-db
+      - postgres
+    ports:
+      - "5000:5000"
+    environment:
+      APP_ENV: production
+      DB_HOST: postgres
+      DB_NAME: nebulastack
+      DB_USER: nebula
+      DB_PASS: secretpass
+    restart: unless-stopped
     networks:
       - nebula-net
 
-  kortex-db:
-    image: postgres:16
-    container_name: kortex-db
-    environment:
-      POSTGRES_USER: ks_admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: ks_dev
-    volumes:
-      - kortex_data:/var/lib/postgresql/data
-      - ./kortexsphere/ks_core_master.sql:/docker-entrypoint-initdb.d/01_ks_core_master.sql
+  web:
+    image: ghcr.io/mshahwaiz-ali/nebulastack-web:latest
+    container_name: nebulastack-web
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+    restart: unless-stopped
     networks:
       - nebula-net
-    ports:
-      - "5450:5432"
 
 volumes:
   db-data:
-  kortex_data:
 
 networks:
   nebula-net:
