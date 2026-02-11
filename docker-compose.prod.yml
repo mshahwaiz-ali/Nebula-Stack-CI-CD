@@ -1,0 +1,7 @@
+services:
+  api:
+    image: ghcr.io/mshahwaiz-alix/nebulastack-api:latest
+    container_name: nebulastack-api
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
