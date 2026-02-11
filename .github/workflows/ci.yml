@@ -35,25 +35,80 @@ jobs:
           docker push $IMAGE:${{ github.sha }}
           docker push $IMAGE:latest
 
-  deploy:
+  name: NebulaStack CI CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR (for push)
+        run: echo "${{ github.token }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      # Build + Push API
+      - name: Build and push API image
+        run: |
+          IMAGE="ghcr.io/${{ github.repository_owner }}/nebulastack-api"
+          docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest ./api
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
+
+      # OPTIONAL: Build + Push WEB (only if you use it in prod compose)
+      - name: Build and push WEB image
+        run: |
+          IMAGE="ghcr.io/${{ github.repository_owner }}/nebulastack-web"
+          docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest ./nginx
+          docker push $IMAGE:${{ github.sha }}
+          docker push $IMAGE:latest
+
+    deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to EC2 (pull + restart)
+      - name: Checkout (needed to copy compose file)
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2 (copy compose + pull + restart)
         run: |
           set -e
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key
           chmod 600 ~/.ssh/ec2_key
 
+          # Create app dir on EC2
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            'set -e
+             sudo mkdir -p /opt/nebulastack
+             sudo chown -R ec2-user:ec2-user /opt/nebulastack
+            '
+
+          # Copy compose file to EC2
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
+            docker-compose.prod.yml \
+            ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/opt/nebulastack/docker-compose.prod.yml
+
+          # Run deploy using that compose file
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
             ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
             'set -e
              cd /opt/nebulastack
-             git pull
              echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
              docker compose -f docker-compose.prod.yml pull
              docker compose -f docker-compose.prod.yml up -d
              docker image prune -f
             '
+
+
