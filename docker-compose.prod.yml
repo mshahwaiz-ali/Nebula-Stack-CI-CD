@@ -1,7 +1,6 @@
 services:
   api:
-    image: ghcr.io/alishahwaiz96-cloud/nebulastack-api:latest
-
+    image: ghcr.io/mshahwaiz-ali/nebulastack-api:latest
     container_name: nebulastack-api
     ports:
       - "5000:5000"
