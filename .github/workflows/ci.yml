@@ -47,6 +47,11 @@ jobs:
         run: |
           set -e
 
+          # Debug: confirm compose file exists in runner workspace
+          pwd
+          ls -la
+          test -f docker-compose.yaml
+
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key
           chmod 600 ~/.ssh/ec2_key
@@ -59,20 +64,21 @@ jobs:
              sudo chown -R ec2-user:ec2-user /opt/nebulastack
             '
 
-          # Copy production compose file to EC2
+          # Copy compose file to EC2 (root file: docker-compose.yaml)
           scp -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
-            docker-compose.prod.yml \
-            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/opt/nebulastack/docker-compose.prod.yml"
+            docker-compose.yaml \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/opt/nebulastack/docker-compose.yaml"
 
-          # Deploy (EC2 has docker-compose v1 binary, not docker compose)
+          # Deploy using docker-compose v1 binary on EC2
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key \
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
             'set -e
              cd /opt/nebulastack
+
              echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
 
-             docker-compose -f docker-compose.prod.yml pull
-             docker-compose -f docker-compose.prod.yml up -d
+             docker-compose -f docker-compose.yaml pull
+             docker-compose -f docker-compose.yaml up -d
 
              docker image prune -f
             '
