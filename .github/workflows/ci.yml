@@ -22,7 +22,7 @@ jobs:
       # Build + Push API
       - name: Build and push API image
         run: |
-          IMAGE="ghcr.io/mshahwaiz-alix/nebulastack-api"
+          IMAGE="ghcr.io/${{ github.repository_owner }}/nebulastack-api"
           docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest ./api
           docker push $IMAGE:${{ github.sha }}
           docker push $IMAGE:latest
@@ -30,7 +30,7 @@ jobs:
       # OPTIONAL: Build + Push WEB (only if you use it in prod compose)
       - name: Build and push WEB image
         run: |
-          IMAGE="ghcr.io/mshahwaiz-alix/nebulastack-web"
+          IMAGE="ghcr.io/${{ github.repository_owner }}/nebulastack-web"
           docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest ./nginx
           docker push $IMAGE:${{ github.sha }}
           docker push $IMAGE:latest
